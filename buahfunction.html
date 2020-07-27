@@ -4,10 +4,13 @@
     var stokBuah = [5, 7, 8]
     var hrgBuah = [10000, 15000, 20000]
     var welcome
-    var kondisi
-    // function pushBuahBaru(x,y) {
-    //     x.push(y)
-    // }
+    var kondisi   
+    function listBuah(x) {
+        for(i=0;i<namaBuah.length;i++){
+            x += (`${i+1}. ${namaBuah[i]} | stok ${stokBuah[i]} | Rp ${hrgBuah[i]}/kg\n`)
+        }
+        alert(x)
+    }
 
     do { // Loop welcomeeeeeeeee
         welcome = prompt('Selamat datang!\n1. Masuk\n2. Keluar')
@@ -27,10 +30,7 @@
                     alert('ERROR! Perhatikan input anda')
                 }else if (menuUtama == 1){ // Input menuUtama 1. Menampilkan daftar buah
                     var output = ''
-                    for(i=0;i<namaBuah.length;i++){
-                        output += (`${i+1}. ${namaBuah[i]} | stok ${stokBuah[i]} | Rp ${hrgBuah[i]}/kg\n`)
-                    }
-                    alert(output)
+                    listBuah(output)
                     kondisiMenuUtama = confirm('Kembali ke menu utama?')
                 }else if(menuUtama == 2){ // Input menuUtama 2. Menambah buah
                     var inputBuah = prompt('Masukkan nama buah')
@@ -40,10 +40,7 @@
                     var inputHarga = prompt('Masukkan jumlah harga satuan')
                     hrgBuah.push(inputHarga)
                     var output = ''
-                    for(i=0;i<namaBuah.length;i++){
-                        output += (`${i+1}. ${namaBuah[i]} | stok ${stokBuah[i]} | Rp ${hrgBuah[i]}/kg\n`)
-                    }
-                    alert(output)
+                    listBuah(output)
                     kondisiMenuUtama = confirm('Kembali ke menu utama?')
                 }else if(menuUtama == 3){ // Input menuUtama 3. Menghapus buah
                     var output1 = ''
@@ -57,10 +54,7 @@
                     alert('Berhasil hapus pilihan: ' + hapus)
                     // belom ada proteksinya WOYYYY
                     var output2 = ''
-                    for(i=0;i<namaBuah.length;i++){
-                        output2 += (`${i+1}. ${namaBuah[i]} | stok ${stokBuah[i]} kg | Rp ${hrgBuah[i]}/kg\n`)
-                    }
-                    alert(output2)
+                    listBuah(output2)
                     kondisiMenuUtama = confirm('Kembali ke menu utama?')
                 }else if(menuUtama == 4){ // Input menuUtama 4. Membeli buah
                     for(i=0;i<namaBuah.length;i++){ // For loop utk auto delete buah saat stok 0
