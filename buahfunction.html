@@ -3,13 +3,22 @@
     var qtyBuah = []
     var stokBuah = [5, 7, 8]
     var hrgBuah = [10000, 15000, 20000]
+    var cartBuah = []
+    var cartQty = []
+    var cartPrice = []
     var welcome
-    var kondisi   
-    function listBuah(x) {
-        for(i=0;i<namaBuah.length;i++){
-            x += (`${i+1}. ${namaBuah[i]} | stok ${stokBuah[i]} | Rp ${hrgBuah[i]}/kg\n`)
+    var kondisi
+
+    const tampilkanBuah=(cart,arr)=>{
+        var output = ''
+        for(i=0;i<arr.length;i++){
+            if(cart){
+                output += (`${i+1}. ${cartBuah[i]} | stok ${cartQty[i]} | Rp ${cartPrice[i]}/kg\n`)
+            }else{
+                output += (`${i+1}. ${namaBuah[i]} | stok ${stokBuah[i]} | Rp ${hrgBuah[i]}/kg\n`)
+            }
         }
-        alert(x)
+        return output
     }
 
     do { // Loop welcomeeeeeeeee
@@ -24,88 +33,181 @@
             do { // Loop Menu
                 var menuUtama = parseInt(prompt('What do you want to do?\n'
                 +'1. Menampilkan daftar buah\n2. Menambah buah\n'
-                +'3. Menghapus buah\n4. Membeli buah'))
-                if(!(menuUtama <=4 && menuUtama>=1)) { // jika input menuUtama selain 1,2,3,4
+                +'3. Mengedit Buah\n4. Membeli buah\n5. Exit'))
+                if(!(menuUtama <=5 && menuUtama>=1)) { // jika input menuUtama selain 1,2,3,4,5
                     kondisi = true
                     alert('ERROR! Perhatikan input anda')
-                }else if (menuUtama == 1){ // Input menuUtama 1. Menampilkan daftar buah
-                    var output = ''
-                    listBuah(output)
+                }else if (menuUtama == 1){ // Input menuUtama 1. Menampilkan daftar buah                   
+                    alert(tampilkanBuah(false, namaBuah)) //FUNCTION
                     kondisiMenuUtama = confirm('Kembali ke menu utama?')
                 }else if(menuUtama == 2){ // Input menuUtama 2. Menambah buah
                     var inputBuah = prompt('Masukkan nama buah')
-                    namaBuah.push(inputBuah)
                     var inputStok = prompt('Masukkan jumlah stok')
-                    stokBuah.push(inputStok)
                     var inputHarga = prompt('Masukkan jumlah harga satuan')
-                    hrgBuah.push(inputHarga)
-                    var output = ''
-                    listBuah(output)
-                    kondisiMenuUtama = confirm('Kembali ke menu utama?')
-                }else if(menuUtama == 3){ // Input menuUtama 3. Menghapus buah
-                    var output1 = ''
-                    for(i=0;i<namaBuah.length;i++){
-                        output1 += (`${i+1}. ${namaBuah[i]}\n`)
+                    var konfirmasi = confirm('Anda yakin')
+
+                    if(konfirmasi){
+                        namaBuah.push(inputBuah)
+                        stokBuah.push(inputStok)
+                        hrgBuah.push(inputHarga)
+                        alert('Berhasil menambah buah!\n' + tampilkanBuah(false, namaBuah))
+                    }else{
+                        alert('Penambahan buah dibatalkan')
                     }
-                    var hapus = parseInt(prompt('Pilih buah yang dihapus\n' + output1))
-                    namaBuah.splice(hapus-1,1) // CARI CARA UTK HAPUS PAKE LOOP
-                    stokBuah.splice(hapus-1,1)
-                    hrgBuah.splice(hapus-1,1)
-                    alert('Berhasil hapus pilihan: ' + hapus)
-                    // belom ada proteksinya WOYYYY
-                    var output2 = ''
-                    listBuah(output2)
+
+                    kondisiMenuUtama = confirm('Kembali ke menu utama?')
+                }else if(menuUtama == 3){ // Input menuUtama 3. Mengedit buah
+                    var editBuah
+                    var kondisiEditBuah = true
+                    do {
+                        editBuah = prompt('Masukkan buah yang ingin anda edit!\n' + tampilkanBuah(false, namaBuah) + (1+namaBuah.length) + '. Exit')
+                        if(!(editBuah>=1 && editBuah<=namaBuah.length+1)){
+                            kondisiEditBuah = true
+                            alert('ERROR! Perhatikan input anda')
+                        }else if(editBuah==(1+namaBuah.length)) {
+                            kondisiEditBuah = false
+                        }else{
+                            var editNamaBuah = prompt('Ganti nama buah ' + namaBuah[editBuah-1] + ' menjadi?')
+                            namaBuah.splice(editBuah-1,1,editNamaBuah)
+                            var editStokBuah = prompt('Ganti stok buah ' + stokBuah[editBuah-1] + ' menjadi?')
+                            stokBuah.splice(editBuah-1,1,editStokBuah)
+                            var editHrgBuah = prompt('Ganti harga buah ' + hrgBuah[editBuah-1] + ' menjadi?')
+                            hrgBuah.splice(editBuah-1,1,editHrgBuah)
+                            alert('Edit buah berhasil!')
+                            kondisiEditBuah = false
+                        }
+                    } while (kondisiEditBuah);
+                    
+                    var kondisiHapus = confirm('Apakah ada buah yang mau dihapus?')
+                    if(kondisiHapus){ // Hapus buah
+                        var output = ''
+                        for(i=0;i<namaBuah.length;i++){
+                            output += (`${i+1}. ${namaBuah[i]}\n`)
+                        }
+                        var hapus
+                        var kondisiInputHapus = true
+                        do {
+                            hapus = parseInt(prompt('Pilih buah yang dihapus\n' + output + (1+namaBuah.length) + '. Exit'))
+                            if(!(hapus>=1 && hapus<=namaBuah.length+1)){
+                                kondisiInputHapus = true
+                                alert('ERROR! Perhatikan input anda')
+                            }else if(hapus==1+namaBuah.length){
+                                kondisiInputHapus = false
+                            }else{
+                                namaBuah.splice(hapus-1,1)
+                                stokBuah.splice(hapus-1,1)
+                                hrgBuah.splice(hapus-1,1)
+                                alert('Berhasil hapus pilihan: ' + hapus)
+                                kondisiInputHapus = false
+                            }
+                        } while (kondisiInputHapus);
+    
+                    }
+
                     kondisiMenuUtama = confirm('Kembali ke menu utama?')
                 }else if(menuUtama == 4){ // Input menuUtama 4. Membeli buah
                     for(i=0;i<namaBuah.length;i++){ // For loop utk auto delete buah saat stok 0
                         if(stokBuah[i]==0){
                             alert('ALERT! Buah ' + namaBuah[i] + ' dihapus dari daftar karena stok habis')
-                            namaBuah.splice(i,1) // CARI CARA UTK HAPUS PAKE LOOP
+                            namaBuah.splice(i,1)
                             stokBuah.splice(i,1)
                             hrgBuah.splice(i,1)
                         }
                     }
                     // Pas belanja ada menu tampilkan cart, jd bisa pilih belanja buah apa aja
-                    for(i=0;i<namaBuah.length;i++){ // For loop utk prompt qtyBuah pake array
-                        do {
-                            qtyBuah[i] = parseInt(prompt('Masukkan jumlah ' + namaBuah[i]))
-                            if(qtyBuah[i]>stokBuah[i]){
-                                alert(`Maaf stok ${namaBuah[i]} hanya ${stokBuah[i]}`)
-                                kondisi = true
-                            }else if(!(qtyBuah[i]>0)) { // Proteksi jika user input string
-                                alert('ERROR! Perhatikan input anda')
-                                kondisi = true
+
+                    do {
+                        var menuBelanja = prompt('1. Pilih buah\n2. Bayar\n3. Tampilkan Cart\n.4 Exit')
+                        var kondisiMenuBelanja = true // kalau ga di define = false
+                        if (menuBelanja==1) {
+                            do {
+                                var kondisiPilihBuah = true
+                                do {
+                                    var pilihanBelanja = prompt('Silahkan pilih buah:\n' + tampilkanBuah(false, namaBuah))
+                                    if(!(pilihanBelanja>=1 && pilihanBelanja<=namaBuah.length)){
+                                        var proteksiPilBel = true
+                                        alert('ERROR! Perhatikan input anda')
+                                    }else{
+                                        proteksiPilBel = false
+                                    }
+                                } while (proteksiPilBel);
+                                var indexCart = -1
+                                for(j=0;j<cartBuah.length;j++){
+                                    if(cartBuah[j]==namaBuah[pilihanBelanja-1]){
+                                        indexCart = j
+                                    }
+                                }
+                                var qtyBelanja = parseInt(prompt('Masukkan quantity buah ' + namaBuah[pilihanBelanja-1]))
+                                if(qtyBelanja>stokBuah[pilihanBelanja-1]){
+                                    alert('Maaf stok buah: ' + namaBuah[pilihanBelanja-1] + ' tidak cukup')
+                                    kondisiPilihBuah = true
+                                }else{
+                                    if(indexCart<0){ // indexCart = 0 berarti buah pilihanBelanja belum dibeli
+                                        cartBuah.push(namaBuah[pilihanBelanja-1])
+                                        cartPrice.push(hrgBuah[pilihanBelanja-1])
+                                        cartQty.push(qtyBelanja)
+        
+                                    }else{ // kalau buah di pilihanBelanja udah ada di cartBuah
+                                        cartQty[indexCart] += qtyBelanja
+                                    }
+                                    stokBuah[pilihanBelanja-1] -= qtyBelanja
+                                    alert('Dimasukkan ke cart!')
+                                    kondisiPilihBuah = false
+                                }
+                            
+                            } while (kondisiPilihBuah);
+                        }else if(menuBelanja==2){ // Menu belanja : 2. Bayar
+                            
+                            var output = ''
+                            var totalHarga = 0
+                            for(i=0;i<cartBuah.length;i++){ // Loop hitung total harga
+                                totalHarga += cartQty[i]*cartPrice[i]
+                                output += (`${cartBuah[i]}: ${cartQty[i]} kg x ${cartPrice[i]} = ${(cartQty[i])*(cartPrice[i])}\n`)
+                            }
+                            alert(output + '\nTotal : Rp ' + totalHarga)
+                            do { // Loop proteksi pembayaran
+                                var kondisi
+                                var payment = parseInt(prompt('Masukkan jumlah uang anda'))
+                                if(payment < totalHarga){
+                                    alert('Maaf uang anda kurang sebesar Rp ' + (totalHarga-payment))
+                                    kondisi = true
+                                }else if(payment > totalHarga){
+                                    alert('Terimakasih, kembalian anda sebesar Rp ' + (payment-totalHarga))
+                                    kondisi = false
+                                }else if(payment == totalHarga){
+                                    alert('Terimakasih, uang anda pas')
+                                    kondisi = false
+                                }else if(!(payment>0)){
+                                    alert('ERROR! Perhatikan input anda')
+                                    kondisi = true
+                                }
+                            } while (kondisi);
+                            kondisiMenuBelanja = confirm('Apakah ingin belanja lagi?')
+                            cartBuah = []
+                            cartQty = []
+                            cartPrice = []
+
+                        }else if (menuBelanja==3){ // Menu belanja ; 3. Tampilkan cart
+                            if (cartBuah.length) { // jika cartbuah ada valuenya (bukan 0), karena defaultnya 0
+                                // output = ''
+                                // for(i=0;i<cartBuah.length;i++){
+                                //     output += (`${i+1}. ${cartBuah[i]} | stok ${cartQty[i]} | Rp ${cartPrice[i]}/kg\n`)
+                                // }
+                                // alert('Cart:\n' + output)
+                                alert('Cart:\n' + tampilkanBuah(true, cartBuah))
+                                
                             }else{
-                                stokBuah[i] -= qtyBuah[i]
-                                kondisi = false
-                            }                          
-                        } while (kondisi);
-                    }
-                    var output = ''
-                    var totalHarga = 0
-                    for(i=0;i<namaBuah.length;i++){ // Loop hitung total harga
-                        totalHarga += qtyBuah[i]*hrgBuah[i]
-                        output += (`${namaBuah[i]}: ${qtyBuah[i]} kg x ${hrgBuah[i]} = ${(qtyBuah[i])*(hrgBuah[i])}\n`)
-                    }
-                    alert(output + '\nTotal : Rp ' + totalHarga)
-                    
-                    do { // Loop proteksi pembayaran
-                        var payment = parseInt(prompt('Masukkan jumlah uang anda'))
-                        if(payment < totalHarga){
-                            alert('Maaf uang anda kurang sebesar Rp ' + (totalHarga-payment))
-                            kondisi = true
-                        }else if(payment > totalHarga){
-                            alert('Terimakasih, kembalian anda sebesar Rp ' + (payment-totalHarga))
-                            kondisi = false
-                        }else if(payment == totalHarga){
-                            alert('Terimakasih, uang anda pas')
-                            kondisi = false
-                        }else if(!(payment>0)){
-                            alert('ERROR! Perhatikan input anda')
-                            kondisi = true
+                                alert('Mohon untuk belanja dahulu, cart kosong')
+                                kondisiMenuBelanja = confirm('Apakah ingin belanja kembali?')
+                            }
+                        }else if (menuBelanja==4){
+                            kondisiMenuBelanja = false
                         }
-                    } while (kondisi);
+
+                    } while (kondisiMenuBelanja);
                     kondisiMenuUtama = confirm('Kembali ke menu utama?')
+                }else{ // Menu utama = 5. Exit
+                    break
                 }
             } while (kondisiMenuUtama); 
         }
